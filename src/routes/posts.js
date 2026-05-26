@@ -3,6 +3,7 @@ const router = express.Router();
 const postController = require('../controllers/postController');
 const authenticateToken = require('../middlewares/auth');
 const upload = require('../middlewares/upload');
+const reportController = require('../controllers/reportController');
 
 // GET /api/posts - 게시글 목록 조회 (검색/필터)
 router.get('/', postController.getPosts);
@@ -37,5 +38,7 @@ router.post('/:postId/wish', authenticateToken, postController.addWish);
 
 // DELETE /api/posts/:postId/wish - 찜 해제
 router.delete('/:postId/wish', authenticateToken, postController.removeWish);
+
+router.post('/:postId/report', authenticateToken, reportController.reportPost);
 
 module.exports = router;

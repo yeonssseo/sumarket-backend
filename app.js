@@ -33,6 +33,9 @@ app.use('/api/my', mypageRoutes);
 const collegeRoutes = require('./src/routes/colleges');
 app.use('/api/codes/colleges', collegeRoutes);
 
+const messageRoutes = require('./src/routes/messages');
+app.use('/api/messages', messageRoutes);
+
 app.get('/', (req, res) => {
   res.json({ message: '수마켓 API 서버가 정상 작동 중입니다!' });
 });

@@ -94,10 +94,6 @@ exports.getPostDetail = async (req, res) => {
       college: post.college,
       department: post.department,
       description: post.description,
-      contact: {
-        phone: post.phone || null,
-        openChatUrl: post.open_chat_url || null,
-      },
       images: images.map((img) => img.imageUrl),
       seller: {
         name: post.sellerName,
@@ -124,8 +120,6 @@ exports.createPost = async (req, res) => {
     college,
     department,
     description,
-    phone,
-    openChatUrl,
   } = req.body;
   const userId = req.user.id;
 
@@ -140,16 +134,11 @@ exports.createPost = async (req, res) => {
   ) {
     return res.status(400).json({ error: '필수 항목을 모두 입력해주세요.' });
   }
-  if (!phone && !openChatUrl) {
-    return res
-      .status(400)
-      .json({ error: '전화번호 또는 오픈채팅 링크 중 하나는 필수입니다.' });
-  }
 
   try {
     const [result] = await pool.query(
-      `INSERT INTO posts (user_id, book_title, book_author, subject, price, book_condition, college, department, description, phone, open_chat_url, trade_status)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, '거래전')`,
+      `INSERT INTO posts (user_id, book_title, book_author, subject, price, book_condition, college, department, description, trade_status)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, '거래전')`,
       [
         userId,
         bookTitle,
@@ -160,8 +149,6 @@ exports.createPost = async (req, res) => {
         college,
         department,
         description || null,
-        phone || null,
-        openChatUrl || null,
       ],
     );
 
@@ -198,8 +185,6 @@ exports.updatePost = async (req, res) => {
     college,
     department,
     description,
-    phone,
-    openChatUrl,
     deleteImageIds,
   } = req.body;
 
@@ -213,11 +198,6 @@ exports.updatePost = async (req, res) => {
     !department
   ) {
     return res.status(400).json({ error: '필수 항목을 모두 입력해주세요.' });
-  }
-  if (!phone && !openChatUrl) {
-    return res
-      .status(400)
-      .json({ error: '전화번호 또는 오픈채팅 링크 중 하나는 필수입니다.' });
   }
 
   try {
@@ -272,7 +252,7 @@ exports.updatePost = async (req, res) => {
     }
 
     await pool.query(
-      `UPDATE posts SET book_title=?, book_author=?, subject=?, price=?, book_condition=?, college=?, department=?, description=?, phone=?, open_chat_url=?, updated_at=NOW()
+      `UPDATE posts SET book_title=?, book_author=?, subject=?, price=?, book_condition=?, college=?, department=?, description=?, updated_at=NOW()
        WHERE id=?`,
       [
         bookTitle,
@@ -283,8 +263,6 @@ exports.updatePost = async (req, res) => {
         college,
         department,
         description || null,
-        phone || null,
-        openChatUrl || null,
         postId,
       ],
     );
