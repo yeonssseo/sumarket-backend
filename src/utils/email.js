@@ -1,22 +1,12 @@
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 require('dotenv').config();
 
-const transporter = nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 587,
-  secure: false,
-  family: 4,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// 인증 코드 이메일 발송
 const sendVerificationEmail = async (to, code) => {
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
+  const msg = {
     to,
+    from: process.env.EMAIL_USER,
     subject: '[수마켓] 이메일 인증 코드',
     html: `
       <h2>수마켓 이메일 인증</h2>
@@ -26,7 +16,7 @@ const sendVerificationEmail = async (to, code) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  await sgMail.send(msg);
 };
 
 module.exports = { sendVerificationEmail };
