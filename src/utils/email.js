@@ -1,11 +1,20 @@
-const { Resend } = require('resend');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  family: 4,
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 const sendVerificationEmail = async (to, code) => {
-  await resend.emails.send({
-    from: 'onboarding@resend.dev',
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
     to,
     subject: '[수마켓] 이메일 인증 코드',
     html: `
@@ -14,7 +23,9 @@ const sendVerificationEmail = async (to, code) => {
       <p>이 코드는 5분간 유효합니다.</p>
       <h1 style="letter-spacing: 8px; color: #0066cc;">${code}</h1>
     `,
-  });
+  };
+
+  await transporter.sendMail(mailOptions);
 };
 
 module.exports = { sendVerificationEmail };
