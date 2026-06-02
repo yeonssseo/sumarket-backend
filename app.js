@@ -9,6 +9,11 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(express.json());
 
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
+
 // DB 연결 테스트
 pool
   .getConnection()
@@ -42,9 +47,4 @@ app.get('/', (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`서버가 포트 ${PORT}에서 실행 중입니다.`);
-});
-
-app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
-  next();
 });
