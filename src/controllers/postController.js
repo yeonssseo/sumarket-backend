@@ -174,6 +174,8 @@ exports.createPost = async (req, res) => {
 
 // PUT /api/posts/:postId - 게시글 수정
 exports.updatePost = async (req, res) => {
+  console.log('req.files:', req.files);
+  console.log('req.body:', req.body);
   const { postId } = req.params;
   const userId = req.user.id;
   const {
