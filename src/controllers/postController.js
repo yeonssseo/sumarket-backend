@@ -22,7 +22,7 @@ exports.getPosts = async (req, res) => {
   try {
     let query = `
       SELECT p.id AS postId, p.book_title AS bookTitle, p.subject, 
-             p.college, p.department, p.trade_status AS tradeStatus,
+             p.college, p.department, p.trade_status AS tradeStatus, p.price,
              (SELECT image_url FROM images WHERE post_id = p.id ORDER BY order_num ASC LIMIT 1) AS thumbnailUrl
       FROM posts p
       WHERE 1=1
