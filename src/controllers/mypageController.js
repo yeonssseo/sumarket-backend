@@ -27,7 +27,7 @@ exports.getMyPosts = async (req, res) => {
   try {
     const [posts] = await pool.query(
       `SELECT p.id AS postId, p.book_title AS bookTitle, p.subject, 
-              p.college, p.department, p.trade_status AS tradeStatus,
+              p.college, p.department, p.trade_status AS tradeStatus, p.price, 
               (SELECT image_url FROM images WHERE post_id = p.id ORDER BY order_num ASC LIMIT 1) AS thumbnailUrl
        FROM posts p
        WHERE p.user_id = ?
@@ -49,7 +49,7 @@ exports.getMyWishes = async (req, res) => {
   try {
     const [posts] = await pool.query(
       `SELECT p.id AS postId, p.book_title AS bookTitle, p.subject,
-              p.college, p.department, p.trade_status AS tradeStatus,
+              p.college, p.department, p.trade_status AS tradeStatus, p.price,
               (SELECT image_url FROM images WHERE post_id = p.id ORDER BY order_num ASC LIMIT 1) AS thumbnailUrl
        FROM wishes w
        JOIN posts p ON w.post_id = p.id
