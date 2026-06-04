@@ -73,7 +73,7 @@ exports.getPostDetail = async (req, res) => {
 
     // 이미지 목록
     const [images] = await pool.query(
-      'SELECT image_url AS imageUrl FROM images WHERE post_id = ? ORDER BY order_num ASC',
+      'SELECT id AS imageId, image_url AS imageUrl FROM images WHERE post_id = ? ORDER BY order_num ASC',
       [postId],
     );
 
@@ -94,7 +94,10 @@ exports.getPostDetail = async (req, res) => {
       college: post.college,
       department: post.department,
       description: post.description,
-      images: images.map((img) => img.imageUrl),
+      images: images.map((img) => ({
+        imageId: img.imageId,
+        imageUrl: img.imageUrl,
+      })),
       seller: {
         name: post.sellerName,
         college: post.sellerCollege,
